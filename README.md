@@ -81,7 +81,7 @@ Pilot and sensitivity variants remain beside their full configurations. `postpro
 Diagnostics reuse Hodge matrices; they do not estimate nullity from SLQ heat traces or modify network distances. For `L_0^(q)`, nullity is the number of connected components in that layer's 1-skeleton. Small higher-order matrices use a full dense spectrum with a declared zero tolerance. Large matrices use an adaptive smallest-eigenvalue prefix; unresolved higher-order counts remain censored lower bounds. Outputs distinguish `full`, `smallest_prefix`, and `analytic_compact` spectra.
 
 ```bash
-# Synthetic ER/WS/SBM: original preset with BA removed
+# Synthetic ER/WS/SBM:
 python scripts/run_synthetic_zero_modes.py --config experiments/synthetic/ZERO_MODES/synthetic_zero_modes_pilot.json
 python scripts/run_synthetic_zero_modes.py --config experiments/synthetic/ZERO_MODES/synthetic_zero_modes_formal.json
 
