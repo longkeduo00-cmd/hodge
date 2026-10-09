@@ -1,0 +1,129 @@
+{
+  "method": {
+    "max_clique_size": 3,
+    "max_hodge_order": null,
+    "min_layer_q": 0,
+    "time_min": 0.01,
+    "time_max": 100.0,
+    "time_points": 250,
+    "normalization": "per_simplex",
+    "alpha": 0,
+    "solver": "slq",
+    "exact": {
+      "dimension_guard": null,
+      "eigen_zero_tolerance": 1e-10,
+      "eigen_negative_tolerance": 1e-08
+    },
+    "slq": {
+      "num_probes": 32,
+      "lanczos_steps": 64,
+      "seed": 20260814,
+      "breakdown_tolerance": 1e-12
+    },
+    "cache": {
+      "root": "cache",
+      "enabled": true,
+      "persist_simplices": true,
+      "persist_boundaries": true,
+      "persist_hodge": true,
+      "persist_spectral": true,
+      "persist_heat": true,
+      "persist_profiles": true
+    }
+  },
+  "real_validation": {
+    "manifest": "data/real_domains/manifests/real_domains_48.csv",
+    "methods": [
+      "Hodge",
+      "DMeasure",
+      "NetLSD",
+      "Portrait",
+      "Count"
+    ],
+    "linkage": "average",
+    "seed": 20260826,
+    "mst_permutations": 5000,
+    "benchmark_id": "real48-v1-curated",
+    "plotting": {
+      "heatmap_colormap": "jet",
+      "heatmap_label_fontsize": 12,
+      "heatmap_x_label_fontsize": 11,
+      "heatmap_rotation": 90,
+      "cluster_figure_width": 30.0,
+      "cluster_figure_height": 31.0,
+      "cluster_dendrogram_height_ratio": 2.25,
+      "cluster_heatmap_height_ratio": 8.0,
+      "cluster_dendrogram_linewidth": 2.2,
+      "cluster_linkage_tick_fontsize": 14,
+      "domain_block_figure_width": 29.0,
+      "domain_block_figure_height": 27.0,
+      "within_domain_label_fontsize": 12,
+      "core_metrics_figure_width": 18.0,
+      "core_metrics_figure_height": 10.5,
+      "domain_metrics_figure_width": 24.0,
+      "domain_metrics_figure_height": 18.0
+    }
+  },
+  "learning": {
+    "results_root": "results/validation/real_learning_nested/formal",
+    "test_fraction": 0.2,
+    "split_seed": 20260930,
+    "cv_folds": 5,
+    "cv_seed": 20260930,
+    "primary_metric": "nn1_macro_f1",
+    "full_dataset_descriptive": true,
+    "search_space": {
+      "max_clique_size": [
+        3
+      ],
+      "max_hodge_order": [
+        0,
+        1,
+        null
+      ],
+      "min_layer_q": [
+        0,
+        1
+      ],
+      "normalization": [
+        "per_node",
+        "per_simplex"
+      ],
+      "alpha": [
+        -1.0,
+        0.0,
+        0.5,
+        1.0,
+        2.0
+      ]
+    },
+    "nested_cv": {
+      "outer_strategy": "repeated_stratified_kfold",
+      "outer_repeats": 5,
+      "outer_folds": 4,
+      "outer_seed": 20260930,
+      "inner_folds": 5,
+      "inner_seed": 20260930,
+      "require_min_test_per_domain": 2,
+      "mst_permutations": 5000
+    }
+  },
+  "baselines": {
+    "count_normalization": "distribution",
+    "count_min_layer_q": 0,
+    "dmeasure_chunk_size": 128,
+    "netlsd_t_min": 0.01,
+    "netlsd_t_max": 100.0,
+    "netlsd_t_points": 250,
+    "netlsd_eigenvalues": "auto",
+    "netlsd_normalization": "empty",
+    "netlsd_normalized_laplacian": true,
+    "netlsd_protocol_note": "Official NetLSD auto: full eigendecomposition for n<=1024; for n>1024 use 150 eigenvalues from each spectral end and linearly interpolate the middle; no SLQ."
+  },
+  "plotting": {
+    "cluster_leaf_connector": true,
+    "cluster_leaf_connector_linewidth": 1.25,
+    "cluster_leaf_connector_alpha": 0.72,
+    "cluster_leaf_connector_color": "0.42"
+  }
+}
