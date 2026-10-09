@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "hodge-vnext"
 version = "0.2.0"
-description = "Independent exclusive-q Hodge network comparison and real48 experiments"
+description = "Independent exclusive-q Hodge comparison, real48/synthetic experiments, and zero modes"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [

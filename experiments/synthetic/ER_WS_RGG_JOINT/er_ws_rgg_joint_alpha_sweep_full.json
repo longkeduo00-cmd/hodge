@@ -1,0 +1,76 @@
+{
+  "method": {
+    "max_clique_size": null,
+    "max_hodge_order": null,
+    "min_layer_q": 0,
+    "time_min": 0.01,
+    "time_max": 100.0,
+    "time_points": 250,
+    "normalization": "per_simplex",
+    "alpha": 1.0,
+    "solver": "slq",
+    "exact": {
+      "dimension_guard": null,
+      "eigen_zero_tolerance": 1e-10,
+      "eigen_negative_tolerance": 1e-08
+    },
+    "slq": {
+      "num_probes": 24,
+      "lanczos_steps": 40,
+      "seed": 20260814,
+      "breakdown_tolerance": 1e-12
+    },
+    "cache": {
+      "root": "cache",
+      "enabled": true,
+      "persist_simplices": true,
+      "persist_boundaries": true,
+      "persist_hodge": true,
+      "persist_spectral": true,
+      "persist_heat": true,
+      "persist_profiles": true
+    }
+  },
+  "alpha_sweep": {
+    "experiment": "ER_WS_RGG_joint_low_order_alpha_sweep",
+    "alphas": [
+      1.0,
+      0.75,
+      0.5,
+      0.25,
+      0.0,
+      -0.5,
+      -1.0
+    ],
+    "network_sizes": [
+      100,
+      250,
+      500,
+      1000,
+      2000
+    ],
+    "target_degrees": [
+      4,
+      6,
+      8,
+      10,
+      12,
+      14
+    ],
+    "repeats": 50,
+    "base_seed": 22,
+    "ws_betas": [
+      0.001,
+      0.01,
+      0.1,
+      1.0
+    ],
+    "tie_seed": 20260922,
+    "block_size": 64,
+    "feature_dtype": "float64",
+    "distance_dtype": "float32",
+    "persist_graph_distance_matrices": false,
+    "keep_scratch": false,
+    "results_root": "results/validation/hodge_alpha_sweep"
+  }
+}

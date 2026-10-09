@@ -1,0 +1,78 @@
+{
+  "method": {
+    "max_clique_size": 10,
+    "max_hodge_order": null,
+    "min_layer_q": 0,
+    "time_min": 0.01,
+    "time_max": 100.0,
+    "time_points": 250,
+    "normalization": "per_simplex",
+    "alpha": 0.0,
+    "solver": "slq",
+    "exact": {
+      "dimension_guard": null,
+      "eigen_zero_tolerance": 1e-10,
+      "eigen_negative_tolerance": 1e-08
+    },
+    "slq": {
+      "num_probes": 32,
+      "lanczos_steps": 64,
+      "seed": 20260814,
+      "breakdown_tolerance": 1e-12
+    },
+    "cache": {
+      "root": "cache",
+      "enabled": true,
+      "persist_simplices": true,
+      "persist_boundaries": true,
+      "persist_hodge": true,
+      "persist_spectral": true,
+      "persist_heat": true,
+      "persist_profiles": true
+    }
+  },
+  "synthetic_zero_modes": {
+    "results_root": "results/validation/synthetic_zero_modes/formal",
+    "n": 200,
+    "target_mean_degrees": [
+      6,
+      10,
+      14
+    ],
+    "repeats": 10,
+    "base_seed": 20261007,
+    "max_q": 9,
+    "max_k": 9,
+    "models": {
+      "ER": {},
+      "WS": {
+        "beta": 0.1
+      },
+      "SBM": {
+        "blocks": 4,
+        "mu": 0.2
+      }
+    },
+    "diagnostics": {
+      "zero_tolerance": 1e-10,
+      "negative_tolerance": 1e-08,
+      "dense_dimension_guard": 1024,
+      "sparse_initial_k": 16,
+      "sparse_max_k": 128,
+      "sparse_tolerance": 1e-09,
+      "sparse_maxiter": 200000,
+      "random_seed": 20261007,
+      "store_eigenvalues": true
+    },
+    "generate_plots": true,
+    "spectrum_reports": {
+      "enabled": true,
+      "k_orders": [
+        0
+      ],
+      "q_min": 0,
+      "q_max": 9,
+      "columns": 5
+    }
+  }
+}

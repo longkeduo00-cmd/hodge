@@ -1,15 +1,15 @@
-# Hodge VNext · real48
+# Hodge VNext · real and synthetic networks
 
-Hodge network dissimilarity based on **independent exclusive q-layers**, with manual alpha sweeps, learned alpha, and learned q-layer weights on 48 real networks. Here q is maximal-clique size minus one. Each layer has its own downward closure; no global complex is constructed.
+Hodge network dissimilarity based on **independent exclusive q-layers**. Includes real48 parameter learning, ER/WS/SBM/RGG synthetic experiments, and zero-eigenvalue diagnostics. BA is excluded. Here q is maximal-clique size minus one. Each layer has its own downward closure; no global complex is constructed.
 
 ## Files and environment
 
 | Path | Contents |
 | --- | --- |
-| `hodge_vnext/*.py` | Maximal cliques, simplices, Hodge operators, Exact/SLQ, heat traces, distances, and staged caching |
+| `hodge_vnext/*.py` | Hodge core, staged caching, synthetic generators/grids, and zero-mode utilities |
 | `benchmarks/baselines/*.py` | DMeasure, NetLSD, Portrait, Count, and other baselines with provenance |
 | `validation/*.py` | Parameter learning, train/test splits, retrieval metrics, and plotting |
-| `scripts/*.py` / `experiments/real/*.json` | Run entry points / parameters, seeds, and experiment protocols |
+| `scripts/*.py` / `experiments/{real,synthetic}/*.json` | Run entry points / configurations, seeds, and experiment protocols |
 | `data/real_domains/` | `.edgelist` edge lists, `.nodes` node lists, and a CSV provenance manifest for 48 networks |
 | `tests/` | Core, gradient, split, and cache regression tests |
 | `pyproject.toml` / `requirements.txt` | Package dependencies / pinned versions of the validation environment |
@@ -25,9 +25,9 @@ python -m pip install -e . --no-deps
 python -m pytest -q
 ```
 
-## Run experiments
+## Real48 experiments
 
-Run from the repository root. Relative paths in JSON configurations are resolved against that root.
+Run from the repository root. Relative paths in JSON configurations are resolved against that root. On Windows without long-path support, use short cache/output roots: set `method.cache.root` and the experiment's `results_root` in JSON, or use `--cache-root` / `--output-root` where offered.
 
 ```bash
 # Five-method comparison with a fixed configuration
@@ -50,6 +50,49 @@ python scripts/run_real_q_weight_scale_cv.py --config experiments/real/q_scale_c
 ```
 
 Additional configurations: `alpha_holdout.json` (one 80/20 split) and `q_weights_holdout10.json` (ten 80/20 splits), using the corresponding alpha/q entry points. Run `nested_cv.json` with `run_real_learning_nested.py` to select S/Q/qmin/normalization/alpha through inner CV; candidate values are in the JSON. The original learned-alpha configuration uses S=all and Q=all. Large-clique networks may require substantial memory; this configuration has not been replaced with a truncated experiment.
+
+## Synthetic experiments
+
+Original parameter grids, seeds, repeats, and normalizations are retained from `hodge_20261008.zip` for ER/WS/SBM/RGG.
+
+```bash
+python scripts/run_synthetic_validation.py --config experiments/synthetic/ER/er_hodge_full.json
+python scripts/run_synthetic_validation.py --config experiments/synthetic/WS/ws_hodge_full.json
+python scripts/run_synthetic_validation.py --config experiments/synthetic/SBM/sbm_hodge_full.json
+python scripts/run_synthetic_validation.py --config experiments/synthetic/RGG/rgg_hodge_full.json
+```
+
+ER varies p (displayed as Np); WS varies rewiring p at fixed even degree; SBM varies mixing mu at fixed blocks/expected mean degree; RGG varies `lambda=N*V(dim,p_norm)*r^dim`. Each model/parameter/repeat uses an independent deterministic seed derived from its full specification. RGG is sampled in a finite unit box, so lambda is not exactly the realized mean degree. Generated graphs are cached; no static synthetic dataset is required.
+
+Cross-model studies are also included. Run `python scripts/<entry> --config <config>` using:
+
+| Entry | Configuration under `experiments/synthetic/` |
+| --- | --- |
+| `run_er_rgg_comparison.py` | `ER_RGG/er_rgg_matched.json` |
+| `run_er_ws_rgg_discrimination.py` | `ER_WS_RGG/er_ws_rgg_matched.json` |
+| `run_er_ws_rgg_size_discrimination.py` | `ER_WS_RGG_SIZE/er_ws_rgg_size_full.json` |
+| `run_er_ws_rgg_joint_discrimination.py` | `ER_WS_RGG_JOINT/er_ws_rgg_joint_full.json` |
+| `run_hodge_alpha_sweep.py` | `ER_WS_RGG_JOINT/er_ws_rgg_joint_alpha_sweep_full.json` |
+
+Pilot and sensitivity variants remain beside their full configurations. `postprocess_er_ws_rgg_joint.py --run-dir <run_dir>` redraws an existing joint run without recomputing distances. Large full runs can be expensive; use small command-line overrides or pilot configurations for execution checks.
+
+## Zero eigenvalues and spectral reports
+
+Diagnostics reuse Hodge matrices; they do not estimate nullity from SLQ heat traces or modify network distances. For `L_0^(q)`, nullity is the number of connected components in that layer's 1-skeleton. Small higher-order matrices use a full dense spectrum with a declared zero tolerance. Large matrices use an adaptive smallest-eigenvalue prefix; unresolved higher-order counts remain censored lower bounds. Outputs distinguish `full`, `smallest_prefix`, and `analytic_compact` spectra.
+
+```bash
+# Synthetic ER/WS/SBM: original preset with BA removed
+python scripts/run_synthetic_zero_modes.py --config experiments/synthetic/ZERO_MODES/synthetic_zero_modes_pilot.json
+python scripts/run_synthetic_zero_modes.py --config experiments/synthetic/ZERO_MODES/synthetic_zero_modes_formal.json
+
+# Separate RGG preset using the archive's existing RGG diagnostic implementation
+python scripts/run_synthetic_zero_modes.py --config experiments/synthetic/ZERO_MODES/synthetic_zero_modes_rgg.json
+
+# Real48, all retained q/k channels through maximal K10
+python scripts/run_real_zero_mode_diagnostics.py --config experiments/real/real_domains_48_zero_modes_full.json
+```
+
+In the RGG zero-mode preset, the legacy `target_mean_degrees` field supplies lambda; use `realized_mean_degree` for the observed degree. The original ER/WS/SBM configurations are otherwise unchanged. Reports show L0 by default; `--report-k-orders 0,1,2` selects additional matrix orders. Use `render_synthetic_zero_mode_reports.py --run-dir <run_dir>` or `plot_real_zero_mode_spectra.py --run-dir <run_dir>` to render saved spectra again. Diagnostic settings/spectra are cached in `D0_diagnostics`; partial spectra are never presented as full spectra.
 
 ## Method, evaluation, and caching
 

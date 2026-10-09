@@ -1,0 +1,124 @@
+{
+  "method": {
+    "max_clique_size": 10,
+    "max_hodge_order": null,
+    "min_layer_q": 0,
+    "time_min": 0.01,
+    "time_max": 100.0,
+    "time_points": 250,
+    "normalization": "per_simplex",
+    "alpha": 1.0,
+    "solver": "slq",
+    "exact": {
+      "dimension_guard": null,
+      "eigen_zero_tolerance": 1e-10,
+      "eigen_negative_tolerance": 1e-08
+    },
+    "slq": {
+      "num_probes": 32,
+      "lanczos_steps": 64,
+      "seed": 20260814,
+      "breakdown_tolerance": 1e-12
+    },
+    "cache": {
+      "root": "cache",
+      "enabled": true,
+      "persist_simplices": true,
+      "persist_boundaries": true,
+      "persist_hodge": true,
+      "persist_spectral": true,
+      "persist_heat": true,
+      "persist_profiles": true
+    }
+  },
+  "real_validation": {
+    "manifest": "data/real_domains/manifests/real_domains_48.csv",
+    "results_root": "results/validation/real",
+    "methods": [
+      "Hodge",
+      "DMeasure",
+      "NetLSD",
+      "Portrait",
+      "Count"
+    ],
+    "linkage": "average",
+    "seed": 20260826,
+    "mst_permutations": 5000,
+    "expected_domains": {
+      "Biological": {
+        "directory": "data/real_domains/biological/processed",
+        "count": 10
+      },
+      "Collaboration": {
+        "directory": "data/real_domains/collaboration/processed",
+        "count": 9
+      },
+      "Infrastructure_Transportation": {
+        "directory": "data/real_domains/infrastructure_transportation/processed",
+        "count": 10
+      },
+      "Interaction_Communication": {
+        "directory": "data/real_domains/interaction_communication/processed",
+        "count": 10
+      },
+      "Social_Cultural": {
+        "directory": "data/real_domains/social_cultural/processed",
+        "count": 9
+      }
+    },
+    "plotting": {
+      "heatmap_colormap": "jet",
+      "heatmap_label_fontsize": 12,
+      "heatmap_x_label_fontsize": 11,
+      "heatmap_rotation": 90,
+      "cluster_figure_width": 30.0,
+      "cluster_figure_height": 31.0,
+      "cluster_dendrogram_height_ratio": 2.25,
+      "cluster_heatmap_height_ratio": 8.0,
+      "cluster_dendrogram_linewidth": 2.2,
+      "cluster_linkage_tick_fontsize": 14,
+      "domain_block_figure_width": 29.0,
+      "domain_block_figure_height": 27.0,
+      "within_domain_label_fontsize": 12,
+      "alignment_contract": "one dendrogram terminal leaf per heatmap column; one tick/label per dataset cell",
+      "core_metrics_figure_width": 18.0,
+      "core_metrics_figure_height": 10.5,
+      "domain_metrics_figure_width": 24.0,
+      "domain_metrics_figure_height": 18.0
+    },
+    "benchmark_note": "48-network curated benchmark after excluding davis-southern-women and moreno-sampson. Five domains contain 9-10 networks each. Domain labels are external annotations, not unique structural ground truth.",
+    "benchmark_id": "real48-v1-curated"
+  },
+  "baselines": {
+    "count_normalization": "distribution",
+    "count_min_layer_q": 0,
+    "dmeasure_chunk_size": 128,
+    "netlsd_t_min": 0.01,
+    "netlsd_t_max": 100.0,
+    "netlsd_t_points": 250,
+    "netlsd_eigenvalues": "auto",
+    "netlsd_normalization": "empty",
+    "netlsd_normalized_laplacian": true,
+    "netlsd_protocol_note": "Official NetLSD auto: full eigendecomposition for n<=1024; for n>1024 use 150 eigenvalues from each spectral end and linearly interpolate the middle; no SLQ."
+  },
+  "plotting": {
+    "cluster_leaf_connector": true,
+    "cluster_leaf_connector_linewidth": 1.25,
+    "cluster_leaf_connector_alpha": 0.72,
+    "cluster_leaf_connector_color": "0.42"
+  },
+  "real_zero_mode_diagnostics": {
+    "results_root": "results/validation/real_zero_modes",
+    "max_q": 9,
+    "max_k": 9,
+    "store_eigenvalues": true,
+    "dense_dimension_guard": 1200,
+    "sparse_initial_k": 16,
+    "sparse_max_k": 128,
+    "sparse_tolerance": 1e-09,
+    "sparse_maxiter": 200000,
+    "random_seed": 20260925,
+    "force_diagnostic_cache": false,
+    "note": "Formal real diagnostic on the curated 48-network benchmark through maximal K10 (q<=9/k<=9), qmin=0, per_simplex. Full spectra are exact only for channels within dense_dimension_guard; larger channels remain explicitly marked smallest_prefix unless the guard is raised after dimension preflight."
+  }
+}

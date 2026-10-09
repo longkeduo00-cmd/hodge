@@ -1,0 +1,94 @@
+{
+  "method": {
+    "max_clique_size": null,
+    "max_hodge_order": null,
+    "min_layer_q": 0,
+    "time_min": 0.01,
+    "time_max": 100.0,
+    "time_points": 250,
+    "normalization": "per_simplex",
+    "alpha": 0.0,
+    "solver": "slq",
+    "exact": {
+      "dimension_guard": null,
+      "eigen_zero_tolerance": 1e-10,
+      "eigen_negative_tolerance": 1e-08
+    },
+    "slq": {
+      "num_probes": 24,
+      "lanczos_steps": 40,
+      "seed": 20260814,
+      "breakdown_tolerance": 1e-12
+    },
+    "cache": {
+      "root": "cache",
+      "enabled": true,
+      "persist_simplices": true,
+      "persist_boundaries": true,
+      "persist_hodge": true,
+      "persist_spectral": true,
+      "persist_heat": true,
+      "persist_profiles": true
+    }
+  },
+  "validation": {
+    "experiment": "ER_WS_RGG_matched_density_mechanism_discrimination",
+    "n": 1000,
+    "repeats": 10,
+    "base_seed": 22,
+    "target_degrees": [
+      4,
+      6,
+      8,
+      10,
+      12,
+      14
+    ],
+    "ws_betas": [
+      0.001,
+      0.01,
+      0.1,
+      1.0
+    ],
+    "methods": [
+      "Hodge",
+      "DMeasure",
+      "NetLSD",
+      "Portrait",
+      "Count"
+    ],
+    "tie_seed": 20260916,
+    "results_root": "results/validation/model_discrimination",
+    "plotting": {
+      "raw_distance": true,
+      "heatmap_colormap": "jet",
+      "heatmaps": "one_square_figure_per_method",
+      "cell_clustering": "average_linkage_optimal_leaf_ordering",
+      "note": "36 parameter cells = 6 mechanism states x 6 matched target mean degrees; heatmaps use raw cell-mean dissimilarity and separate method-specific color scales.",
+      "mds_2d": {
+        "enabled": true,
+        "method": "deterministic_classical_mds",
+        "levels": [
+          "graph",
+          "cell"
+        ],
+        "graph_encoding": "mechanism=color; target_mean_degree=marker",
+        "cell_encoding": "mechanism=color; target_mean_degree=marker; same-mechanism cells connected by increasing kappa",
+        "cell_diagonal_policy": "zero only for MDS embedding because raw diagonal stores same-cell realization noise",
+        "interpretation": "visualization aid only; not used in formal metrics"
+      }
+    }
+  },
+  "baselines": {
+    "count_normalization": "distribution",
+    "count_min_layer_q": 0,
+    "dmeasure_chunk_size": 128,
+    "netlsd_t_min": 0.01,
+    "netlsd_t_max": 100.0,
+    "netlsd_t_points": 250,
+    "netlsd_eigenvalues": "auto",
+    "netlsd_normalization": "empty",
+    "netlsd_normalized_laplacian": true,
+    "netlsd_protocol_note": "Official NetLSD auto: full eigendecomposition for n<=1024; for n>1024 use 150 eigenvalues from each spectral end and linearly interpolate the middle; no SLQ."
+  }
+}

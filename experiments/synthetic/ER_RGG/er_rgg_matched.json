@@ -1,0 +1,75 @@
+{
+  "method": {
+    "max_clique_size": null,
+    "max_hodge_order": null,
+    "min_layer_q": 1,
+    "time_min": 0.01,
+    "time_max": 100.0,
+    "time_points": 250,
+    "normalization": "per_node",
+    "alpha": 1.0,
+    "solver": "slq",
+    "exact": {
+      "dimension_guard": null,
+      "eigen_zero_tolerance": 1e-10,
+      "eigen_negative_tolerance": 1e-08
+    },
+    "slq": {
+      "num_probes": 24,
+      "lanczos_steps": 40,
+      "seed": 20260814,
+      "breakdown_tolerance": 1e-12
+    },
+    "cache": {
+      "root": "cache",
+      "enabled": true,
+      "persist_simplices": true,
+      "persist_boundaries": true,
+      "persist_hodge": true,
+      "persist_spectral": true,
+      "persist_heat": true,
+      "persist_profiles": true
+    }
+  },
+  "comparison": {
+    "n": 1000,
+    "repeats": 10,
+    "base_seed": 22,
+    "matching": "finite_square_expected_degree",
+    "rgg_dim": 2,
+    "rgg_p_norm": 2.0,
+    "control_values": [
+      0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0,
+      2.5, 3.0, 3.5, 4.0, 4.25, 4.5, 4.512, 4.75,
+      5.0, 5.5, 6.0, 6.5, 6.907755, 7.0, 7.5, 8.0,
+      8.5, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0
+    ],
+    "methods": ["Hodge", "DMeasure", "NetLSD", "Portrait", "Count"],
+    "bootstrap_samples": 1000,
+    "display_max_q": 8,
+    "save_pair_samples": false,
+    "path_length_mode": "none",
+    "path_sample_sources": 64,
+    "results_root": "results/validation/er_rgg_matched",
+    "plotting": {
+      "method_comparison_layout": "vertical",
+      "method_panel_width": 15.5,
+      "method_curve_row_height": 4.0,
+      "raw_distance": true,
+      "heatmap_colormap": "jet",
+      "note": "ER-RGG method comparisons reuse the standard one-method-per-row, independent raw-distance axis, large-font synthetic style."
+    }
+  },
+  "baselines": {
+    "count_normalization": "distribution",
+    "count_min_layer_q": 1,
+    "dmeasure_chunk_size": 128,
+    "netlsd_t_min": 0.01,
+    "netlsd_t_max": 100.0,
+    "netlsd_t_points": 250,
+    "netlsd_eigenvalues": "auto",
+    "netlsd_normalization": "empty",
+    "netlsd_normalized_laplacian": true,
+    "netlsd_protocol_note": "Official NetLSD size-dependent eigenspectrum policy; no Hodge SLQ."
+  }
+}
